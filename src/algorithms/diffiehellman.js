@@ -10,6 +10,12 @@ const DiffieHellmanWrapper = styled.div`
     overflow: auto;
 `;
 
+const colors = {
+    '0': '#627C31',
+    '1': '#F18F01',
+    '3': '#f44141',
+};
+
 const ResultGrid = styled.div`
     display: grid;
     grid-template-columns: ${props => `repeat(${props.columns},1fr)`};
@@ -28,6 +34,7 @@ const Cell = styled.span`
     width: 10%;
     border: 1px solid #eff;
     text-align: center;
+    background-color: ${props => colors[props.color]};
 `;
 
 export class DiffieHellman extends React.Component {
@@ -46,6 +53,28 @@ export class DiffieHellman extends React.Component {
     handleChange = event => {
         this.setState({ [event.target.name]: event.target.value });
     };
+
+    generateColumn = (array, column) => {
+        let columns = [];
+        for (let i = 1; i < array.length; i++) {
+            columns.push(array[i][column]);
+        }
+        return columns;
+    };
+
+    checkColumn = columns => {
+        return columns.filter(x => x === 1).length > 0 ? 1 : 0;
+    };
+
+    transferArrayColumnsToObject = array => {
+        const transferred = {};
+        for (let i = 1; i < array.length; i++) {
+            const columns = this.generateColumn(array, i);
+            transferred[i] = this.checkColumn(columns);
+        }
+        return transferred;
+    };
+
     runDiffHellman = (p, g) => {
         const pNumber = parseInt(p);
         const gNumber = parseInt(g);
@@ -71,16 +100,31 @@ export class DiffieHellman extends React.Component {
         }
         this.setState({ myArray: array });
     };
+
     render() {
         const { p, g, myArray } = this.state;
         let display;
+
         if (myArray.length > 0) {
+            const transferredArray = this.transferArrayColumnsToObject(myArray);
+            console.log(transferredArray);
             const children = myArray.map((row, i) => {
                 return (
                     <Row key={`${i}_row`} row={i + 1}>
                         {row.map((cell, j) => {
+                            let color = 2;
+                            if (i !== 0 && j !== 0) {
+                                color = transferredArray[j];
+                                color = cell === 1 ? 3 : color;
+                                console.log('j,color', j, color);
+                            }
+                            /* console.log('(i,j), [i,j]', i, j, myArray[i][j]); */
                             return (
-                                <Cell key={`${i}row_${j}_cell`} column={j + 1}>
+                                <Cell
+                                    key={`${i}row_${j}_cell`}
+                                    column={j + 1}
+                                    color={color}
+                                >
                                     {cell}
                                 </Cell>
                             );
