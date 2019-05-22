@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import * as rsa from 'node-rsa';
+import rsa from 'node-rsa';
 import { Input } from '../components/shared/input';
 import { PrimaryButton } from '../components/shared/button';
 
