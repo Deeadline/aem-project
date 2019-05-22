@@ -107,7 +107,6 @@ export class DiffieHellman extends React.Component {
 
         if (myArray.length > 0) {
             const transferredArray = this.transferArrayColumnsToObject(myArray);
-            console.log(transferredArray);
             const children = myArray.map((row, i) => {
                 return (
                     <Row key={`${i}_row`} row={i + 1}>
@@ -116,9 +115,7 @@ export class DiffieHellman extends React.Component {
                             if (i !== 0 && j !== 0) {
                                 color = transferredArray[j];
                                 color = cell === 1 ? 3 : color;
-                                console.log('j,color', j, color);
                             }
-                            /* console.log('(i,j), [i,j]', i, j, myArray[i][j]); */
                             return (
                                 <Cell
                                     key={`${i}row_${j}_cell`}
