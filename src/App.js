@@ -5,10 +5,10 @@ import * as ROUTES from './utils/routes';
 import { Layout } from './components/shared/layout';
 
 // import { Home } from './components/home';
-import { Mobius } from './algorithms/mobius';
-import { Euler } from './algorithms/euler';
-import { DiffieHellman } from './algorithms/diffiehellman';
-import { Rsa } from './algorithms/rsa';
+import { Mobius } from './components/mobius/mobius.component';
+import { Euler } from './components/euler/euler.component';
+import { DiffieHellman } from './components/hellman/hellman.component';
+import { Rsa } from './components/rsa/rsa.component';
 
 function App() {
     return (
