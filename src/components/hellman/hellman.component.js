@@ -5,7 +5,33 @@ import { Input } from '../shared/input';
 import { PrimaryButton } from '../shared/button';
 
 import { DiffieHellmanWrapper, ResultGrid, Row, Cell } from './hellman.styles';
-import { getArrayColumns, diffieHellman, getColor } from './hellman.algorithm';
+import { diffieHellman } from './hellman.algorithm';
+
+const zip = (...arrays) => {
+    const maxLength = Math.max(...arrays.map(x => x.length));
+    return Array.from({ length: maxLength }).map((_, i) => {
+        return Array.from({ length: arrays.length }, (_, k) => arrays[k][i]);
+    });
+};
+
+const getColor = (i, j, cell, value) => {
+    let color = 2;
+    if (i !== 0 && j !== 0) {
+        color = value ? 1 : 0;
+        color = cell === 1 ? 3 : color;
+    }
+    return color;
+};
+
+const getArrayColumns = arr => {
+    return zip(...arr).map(
+        e =>
+            e.reduce(
+                (collector, value) => (value === 1 ? collector + 1 : collector),
+                0
+            ) > 1
+    );
+};
 
 export class DiffieHellman extends React.Component {
     state = {
@@ -16,19 +42,18 @@ export class DiffieHellman extends React.Component {
     handleSubmit = event => {
         event.preventDefault();
         const { p, g } = this.state;
+
         this.setState({ p: '' });
         this.setState({ g: '' });
-        this.runDiffHellman(p, g);
-    };
-    handleChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
-    };
 
-    runDiffHellman = (p, g) => {
         const pNumber = parseInt(p);
         const gNumber = parseInt(g);
         const arrayResult = diffieHellman(pNumber, gNumber);
         this.setState({ array: arrayResult });
+    };
+
+    handleChange = event => {
+        this.setState({ [event.target.name]: event.target.value });
     };
 
     generateChildren = array => {
